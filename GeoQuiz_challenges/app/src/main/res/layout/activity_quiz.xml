@@ -36,21 +36,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button
+        <ImageButton
             android:id="@+id/prev_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PREV"
-            android:drawableLeft="@drawable/arrow_left"
-            android:drawablePadding="4dp"/>
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:src="@drawable/arrow_left"
+            android:contentDescription="@string/prev_button_description"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/next_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NEXT"
-            android:drawableRight="@drawable/arrow_right"
-            android:drawablePadding="4dp"/>
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:src="@drawable/arrow_right"
+            android:contentDescription="@string/next_button_description"/>
     </LinearLayout>
 
 
