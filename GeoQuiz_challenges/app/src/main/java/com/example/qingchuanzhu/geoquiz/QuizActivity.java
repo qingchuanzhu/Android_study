@@ -12,8 +12,9 @@ public class QuizActivity extends AppCompatActivity {
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
+    private Button mPrevButton;
     private TextView mQuestionTextView;
-    private int mCurrentIndex = 0;
+    private int mCurrentIndex = -1;
 
     private final Question[] mQuestionBank = new Question[] {
       new Question(R.string.question_australia, true),
@@ -32,22 +33,32 @@ public class QuizActivity extends AppCompatActivity {
         mTrueButton = findViewById(R.id.true_button);
         mFalseButton = findViewById(R.id.false_button);
         mNextButton = findViewById(R.id.next_button);
+        mPrevButton = findViewById(R.id.prev_button);
         mQuestionTextView = findViewById(R.id.question_text_view);
 
         mTrueButton.setOnClickListener(v -> checkAnswer(true));
 
         mFalseButton.setOnClickListener(v -> checkAnswer(false));
 
-        mNextButton.setOnClickListener(v -> updateQuestion());
+        mNextButton.setOnClickListener(v -> updateQuestion(true));
 
-        mQuestionTextView.setOnClickListener(v -> updateQuestion());
+        mPrevButton.setOnClickListener(v -> updateQuestion(false));
 
-        updateQuestion();
+        mQuestionTextView.setOnClickListener(v -> updateQuestion(true));
+
+        updateQuestion(true);
     }
 
-    private void updateQuestion() {
+    private void updateQuestion(boolean next) {
+        int incr = next ? 1 : -1;
+        mCurrentIndex = (mCurrentIndex + incr);
+        if (mCurrentIndex < 0) {
+            mCurrentIndex = mQuestionBank.length - 1;
+        } else {
+            mCurrentIndex %= mQuestionBank.length;
+        }
+
         mQuestionTextView.setText(mQuestionBank[mCurrentIndex].getTextResId());
-        mCurrentIndex = (mCurrentIndex + 1)%mQuestionBank.length;
     }
 
     private void checkAnswer(boolean userPressedTrue) {
