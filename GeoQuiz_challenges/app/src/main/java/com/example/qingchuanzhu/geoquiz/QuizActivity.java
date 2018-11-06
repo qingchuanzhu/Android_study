@@ -32,7 +32,7 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate(Bundle) called");
+        Log.d(TAG, "onCreate(Bundle) called", new Exception());
         setContentView(R.layout.activity_quiz);
 
         if (savedInstanceState != null) {
