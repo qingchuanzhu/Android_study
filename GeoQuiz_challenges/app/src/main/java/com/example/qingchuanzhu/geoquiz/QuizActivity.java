@@ -15,6 +15,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private Button mTrueButton;
     private Button mFalseButton;
+    private Button mCheatButton;
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
     private TextView mQuestionTextView;
@@ -43,6 +44,7 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton = findViewById(R.id.false_button);
         mNextButton = findViewById(R.id.next_button);
         mPrevButton = findViewById(R.id.prev_button);
+        mCheatButton = findViewById(R.id.cheat_button);
         mQuestionTextView = findViewById(R.id.question_text_view);
 
         mTrueButton.setOnClickListener(v -> checkAnswer(true));
@@ -54,6 +56,8 @@ public class QuizActivity extends AppCompatActivity {
         mPrevButton.setOnClickListener(v -> updateQuestion(false));
 
         mQuestionTextView.setOnClickListener(v -> updateQuestion(true));
+
+        mCheatButton.setOnClickListener(v -> {});
 
         updateQuestion(true);
     }
