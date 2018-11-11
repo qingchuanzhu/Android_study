@@ -59,7 +59,7 @@ public class QuizActivity extends AppCompatActivity {
         mQuestionTextView.setOnClickListener(v -> updateQuestion(true));
 
         mCheatButton.setOnClickListener(v -> {
-            Intent intent = new Intent(QuizActivity.this, CheatActivity.class);
+            Intent intent = CheatActivity.newIntent(QuizActivity.this, mQuestionBank[mCurrentIndex].isAnswerTrue());
             startActivity(intent);
         });
 
