@@ -1,6 +1,7 @@
 package com.example.qingchuanzhu.geoquiz;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ public class QuizActivity extends AppCompatActivity {
     private ImageButton mPrevButton;
     private TextView mQuestionTextView;
     private int mCurrentIndex = -1;
+    private boolean mIsCheater = false;
 
     private final Question[] mQuestionBank = new Question[] {
       new Question(R.string.question_australia, true),
@@ -53,7 +55,10 @@ public class QuizActivity extends AppCompatActivity {
 
         mFalseButton.setOnClickListener(v -> checkAnswer(false));
 
-        mNextButton.setOnClickListener(v -> updateQuestion(true));
+        mNextButton.setOnClickListener(v -> {
+            updateQuestion(true);
+            mIsCheater = false;
+        });
 
         mPrevButton.setOnClickListener(v -> updateQuestion(false));
 
@@ -65,6 +70,16 @@ public class QuizActivity extends AppCompatActivity {
         });
 
         updateQuestion(true);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        } else {
+            mIsCheater = CheatActivity.wasAnswerShown(data);
+        }
     }
 
     @Override
@@ -123,6 +138,8 @@ public class QuizActivity extends AppCompatActivity {
     private void checkAnswer(boolean userPressedTrue) {
         boolean correct = mQuestionBank[mCurrentIndex].isAnswerTrue() == userPressedTrue;
         int messageResId = correct ? R.string.correct_toast : R.string.incorrect_toast;
+        if (mIsCheater)
+            messageResId = R.string.judgment_toast;
         Toast.makeText(this,messageResId,Toast.LENGTH_SHORT).show();
     }
 }
