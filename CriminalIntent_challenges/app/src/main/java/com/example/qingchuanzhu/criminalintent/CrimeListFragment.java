@@ -15,6 +15,9 @@ import java.util.List;
 
 public class CrimeListFragment extends Fragment {
 
+    private static final int defaultItem = 0;
+    private static final int needPoliceItem = 1;
+
     private RecyclerView mCrimeRecyclerView;
 
     @Override
@@ -33,15 +36,14 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView.setAdapter(adapter);
     }
 
-    // ViewHolder inner class
+    // Crime ViewHolder inner class
     private static class CrimeHolder extends RecyclerView.ViewHolder {
 
         private TextView mTitleTextView;
         private TextView mDateTextView;
 
-        public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_crime, parent,false));
-
+        public CrimeHolder(LayoutInflater inflater, ViewGroup parent, int resourceID) {
+            super(inflater.inflate(resourceID, parent,false));
             mTitleTextView = itemView.findViewById(R.id.crime_title);
             mDateTextView = itemView.findViewById(R.id.crime_date);
         }
@@ -68,15 +70,27 @@ public class CrimeListFragment extends Fragment {
 
         @NonNull
         @Override
-        public CrimeHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        public CrimeHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            return new CrimeHolder(inflater,viewGroup );
+            int resourceID = 0;
+            if (viewType == defaultItem) {
+                resourceID = R.layout.list_item_crime;
+            } else {
+                resourceID = R.layout.list_item_policecrime;
+            }
+            return new CrimeHolder(inflater,viewGroup,resourceID);
         }
 
         @Override
         public void onBindViewHolder(@NonNull CrimeHolder crimeHolder, int i) {
             Crime crime = mCrimes.get(i);
             crimeHolder.bindCrime(crime);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            Crime crime = mCrimes.get(position);
+            return crime.isRequiresPolice() ? needPoliceItem : defaultItem;
         }
     }
 }
