@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -30,10 +29,20 @@ public class CrimeListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
     private void updateUI() {
-        CrimeLab crimeLab = CrimeLab.get(getActivity());
-        CrimeAdapter adapter = new CrimeAdapter(crimeLab.getCrimes());
-        mCrimeRecyclerView.setAdapter(adapter);
+        if (mCrimeRecyclerView.getAdapter() != null) {
+            mCrimeRecyclerView.getAdapter().notifyDataSetChanged();
+        } else {
+            CrimeLab crimeLab = CrimeLab.get(getActivity());
+            CrimeAdapter adapter = new CrimeAdapter(crimeLab.getCrimes());
+            mCrimeRecyclerView.setAdapter(adapter);
+        }
     }
 
     // ViewHolder inner class
@@ -52,7 +61,7 @@ public class CrimeListFragment extends Fragment {
             mSolvedImageView = itemView.findViewById(R.id.crime_solved);
 
             itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(getActivity(), CrimeActivity.class);
+                Intent intent = CrimeActivity.newIntent(getActivity(),mCrime.getID());
                 startActivity(intent);
             });
         }
