@@ -1,5 +1,6 @@
 package com.example.qingchuanzhu.criminalintent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,7 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -34,21 +37,31 @@ public class CrimeListFragment extends Fragment {
     }
 
     // ViewHolder inner class
-    private static class CrimeHolder extends RecyclerView.ViewHolder {
+    private class CrimeHolder extends RecyclerView.ViewHolder {
 
         private TextView mTitleTextView;
         private TextView mDateTextView;
+        private ImageView mSolvedImageView;
+        private Crime mCrime;
 
         public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_crime, parent,false));
 
             mTitleTextView = itemView.findViewById(R.id.crime_title);
             mDateTextView = itemView.findViewById(R.id.crime_date);
+            mSolvedImageView = itemView.findViewById(R.id.crime_solved);
+
+            itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(getActivity(), CrimeActivity.class);
+                startActivity(intent);
+            });
         }
 
         public void bindCrime(Crime crime) {
+            mCrime = crime;
             mTitleTextView.setText(crime.getTitle());
             mDateTextView.setText(crime.getDate().toString());
+            mSolvedImageView.setVisibility(crime.isSolved() ? View.INVISIBLE : View.VISIBLE);
         }
     }
 
