@@ -1,5 +1,7 @@
 package com.example.qingchuanzhu.criminalintent;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,10 +22,15 @@ public class CrimePagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crime_pager);
 
+        mCrimes = CrimeLab.get(this).getCrimes();
         mViewPager = findViewById(R.id.crime_view_pager);
         FragmentManager fm = getSupportFragmentManager();
         mViewPager.setAdapter(new CrimePagerAdapter(fm));
-        mCrimes = CrimeLab.get(this).getCrimes();
+    }
+
+    public static Intent newIntent(Context context) {
+        Intent intent = new Intent(context, CrimePagerActivity.class);
+        return intent;
     }
 
     // PagerAdapter Inner class

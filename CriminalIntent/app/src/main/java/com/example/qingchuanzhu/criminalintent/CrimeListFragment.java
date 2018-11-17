@@ -61,7 +61,7 @@ public class CrimeListFragment extends Fragment {
             mSolvedImageView = itemView.findViewById(R.id.crime_solved);
 
             itemView.setOnClickListener(view -> {
-                Intent intent = CrimeActivity.newIntent(getActivity(),mCrime.getID());
+                Intent intent = CrimePagerActivity.newIntent(getActivity());
                 startActivity(intent);
             });
         }
