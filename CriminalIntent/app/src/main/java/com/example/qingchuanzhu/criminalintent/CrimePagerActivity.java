@@ -11,8 +11,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
+import java.util.UUID;
 
 public class CrimePagerActivity extends AppCompatActivity {
+
+    private static final String EXTRA_START_CRIME_ID = "com.example.qingchuanzhu.criminalintent.start_crime_id";
 
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
@@ -26,10 +29,13 @@ public class CrimePagerActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.crime_view_pager);
         FragmentManager fm = getSupportFragmentManager();
         mViewPager.setAdapter(new CrimePagerAdapter(fm));
+        UUID start_id = (UUID) getIntent().getSerializableExtra(EXTRA_START_CRIME_ID);
+        mViewPager.setCurrentItem(CrimeLab.get(this).getCrimeIndexById(start_id), true);
     }
 
-    public static Intent newIntent(Context context) {
+    public static Intent newIntent(Context context, UUID crimeID) {
         Intent intent = new Intent(context, CrimePagerActivity.class);
+        intent.putExtra(EXTRA_START_CRIME_ID,crimeID );
         return intent;
     }
 
