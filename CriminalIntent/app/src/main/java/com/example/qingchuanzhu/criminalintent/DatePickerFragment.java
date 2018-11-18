@@ -1,6 +1,8 @@
 package com.example.qingchuanzhu.criminalintent;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,10 +14,12 @@ import android.widget.DatePicker;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DatePickerFragment extends DialogFragment {
 
     private static final String ARG_CRIME_DATE = "crime_date";
+    public static final String EXTRA_DATE = "com.example.qingchuanzhu.criminalintent.date";
 
     private Date crimeDate;
 
@@ -48,9 +52,24 @@ public class DatePickerFragment extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setView(datePicker)
                 .setTitle(R.string.date_picker_title)
-                .setPositiveButton(android.R.string.ok, null)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    DatePicker mDatePicker = (DatePicker)datePicker;
+                    int yearPick = mDatePicker.getYear();
+                    int monthPick = mDatePicker.getMonth();
+                    int dayPick = mDatePicker.getDayOfMonth();
+                    Date date = new GregorianCalendar(yearPick, monthPick, dayPick).getTime();
+                    sendResult(Activity.RESULT_OK,date );
+                })
                 .create();
     }
 
+    private void sendResult(int resultCode, Date date) {
+        if (getTargetFragment() == null) {
+            return;
+        }
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_DATE,date );
+        getTargetFragment().onActivityResult(getTargetRequestCode(),resultCode ,intent );
+    }
 
 }
