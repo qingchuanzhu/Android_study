@@ -21,18 +21,16 @@ public class CrimeLab {
         return sCrimeLab;
     }
 
+    public void addCrime(Crime c) {
+        mIndexDict.put(c.getID(),mCrimes.size());
+        mCrimes.add(c);
+        mDict.put(c.getID(),c);
+    }
+
     private CrimeLab(Context context) {
         mCrimes = new ArrayList<>();
         mDict = new HashMap<>();
         mIndexDict = new HashMap<>();
-        for (int i = 0; i < 100; i++) {
-            Crime c = new Crime();
-            c.setTitle("Crime #" + i);
-            c.setSolved(i % 2 == 0);
-            mCrimes.add(c);
-            mDict.put(c.getID(),c);
-            mIndexDict.put(c.getID(),i);
-        }
     }
 
     public List<Crime> getCrimes() {
