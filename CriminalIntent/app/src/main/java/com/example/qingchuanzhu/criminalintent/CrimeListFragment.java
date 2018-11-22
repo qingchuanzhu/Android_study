@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import java.util.List;
 public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
+    private boolean mSubtitleVisible;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +51,13 @@ public class CrimeListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_crime_list,menu);
+
+        MenuItem item = menu.findItem(R.id.show_subtitle);
+        if (mSubtitleVisible) {
+            item.setTitle(R.string.hide_subtitle);
+        } else {
+            item.setTitle(R.string.show_subtitle);
+        }
     }
 
     @Override
@@ -60,6 +69,11 @@ public class CrimeListFragment extends Fragment {
                 CrimeLab.get(getActivity()).addCrime(c);
                 Intent intent = CrimePagerActivity.newIntent(getActivity(), c.getID());
                 startActivity(intent);
+                return true;
+            case R.id.show_subtitle:
+                mSubtitleVisible = !mSubtitleVisible;
+                getActivity().invalidateOptionsMenu();
+                updateSubtitle();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -74,6 +88,16 @@ public class CrimeListFragment extends Fragment {
             CrimeAdapter adapter = new CrimeAdapter(crimeLab.getCrimes());
             mCrimeRecyclerView.setAdapter(adapter);
         }
+        updateSubtitle();
+    }
+
+    private void updateSubtitle() {
+        CrimeLab lab = CrimeLab.get(getActivity());
+        String subtitle = getString(R.string.subtitle_format, lab.getCrimes().size());
+        if (!mSubtitleVisible)
+            subtitle = null;
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
     // ViewHolder inner class
